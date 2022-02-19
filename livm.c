@@ -77,7 +77,13 @@ struct VMinst* loadRAM(struct VMinst* vm, uint64_t* RAM, uint64_t length) {
 struct VMinst* deleteVM(struct VMinst* vm) {
 	LIVMDELETING;
 	free(vm->ram);
+	dev_delete(vm);
 	return vm;
+}
+
+void print_ullram(struct VMinst* vm) {
+	for (int i = 0; i < 100; i++) printf("%lu ", vm->uram64[i]);
+	printf("\n");
 }
 
 struct VMinst* runVM(struct VMinst* vm) {
@@ -134,7 +140,9 @@ struct VMinst* runVM(struct VMinst* vm) {
 			#include "xcase.c"
 		}
 		#ifdef LLLIVMDEBUG
-			getchar();
+			if (getchar() == 'x') {
+				print_ullram(vm);
+			};
 		#endif
 	}
 	end: LIVMENDWORK;
