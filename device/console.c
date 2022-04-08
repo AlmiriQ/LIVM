@@ -11,6 +11,7 @@ void console_write(struct VMinst* vm, void* data, uint64_t length) {
 
 void console_out(struct VMinst* vm) {
 	puts((char*)(CONSOLE.buffer + 2));
+	((uint16_t*)CONSOLE.buffer)[0] = 0;
 }
 
 void console_read(struct VMinst* vm, void* buffer, uint64_t length, uint64_t where) {
@@ -32,7 +33,7 @@ void console_wait(struct VMinst* vm, uint64_t data) {
 
 void console_poweroff(struct VMinst* vm) {
 	#ifdef LLLIVMDEBUG
-		puts("console_poweroff<");
+		puts("<console_poweroff");
 	#endif
 	free(CONSOLE.buffer);
 	#ifdef LLLIVMDEBUG

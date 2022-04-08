@@ -2,15 +2,17 @@
 (C) M. Ærþ.
 */
 
-#define DEV_C 2
+#define DEV_C 3
 
 #include "device/clock.c"
 #include "device/console.c"
+#include "device/rom.c"
 
 void dev_init(struct VMinst* vm) {
 	vm->devices = (struct IODevice*)malloc(sizeof(struct IODevice) * DEV_C);
 	setup_clock(vm);
 	setup_console(vm);
+	setup_rom(vm);
 	#ifdef LIVMDEBUG
 		puts("dev_init");
 	#endif

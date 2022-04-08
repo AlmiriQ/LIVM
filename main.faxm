@@ -1,0 +1,15 @@
+[mainfile]
+[x64u+DATA+minsize-8]
+object helloworld:
+	|"hello world", |0 ?
+		length=|12;
+object hellohell:
+	|"hell-oh!", |0 ?
+		length=|9;
+[x64+CODE+nominsize]
+section start:
+	write |1 ^helloworld, #helloworld.length;
+	out |1;
+	write |1 ^hellohell, #hellohell.length;
+	out |1;
+	poff;
