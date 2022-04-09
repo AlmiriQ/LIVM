@@ -1,15 +1,8 @@
-[mainfile]
-[x64u+DATA+minsize-8]
-object helloworld:
-	|"hello world", |0 ?
-		length=|12;
-object hellohell:
-	|"hell-oh!", |0 ?
-		length=|9;
-[x64+CODE+nominsize]
+[x64u+DATA+align-8]
+string helloworld: |"hello world";
+string hellohell:  |"hell-oh!";
+[x64+CODE+noalign]
 section start:
-	write |1 ^helloworld, #helloworld.length;
-	out |1;
-	write |1 ^hellohell, #hellohell.length;
-	out |1;
-	poff;
+	console.print(^helloworld, #helloworld.length)
+	console.print(^hellohell, #hellohell.length)
+	poff

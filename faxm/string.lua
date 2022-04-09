@@ -1,5 +1,6 @@
 return {
 	source = function(source)
+		local tl = {}
 		while source:match[[|"[^"]+"]] do
 			local s = source:match[[|"[^"]+"]]
 			local ss = s
@@ -16,11 +17,20 @@ return {
 					r[#r + 1] = "|x" .. table.concat(rt, "")
 				end
 			end
+			if #(r[#r]:gsub("000", "")) == #(r[#r]) then
+				r[#r + 1] = "|x0000000000000000"
+			end
 			local function regexEscape(str)
 				return str:gsub("[%(%)%.%%%+%-%*%?%[%^%$%]]", "%%%1")
 			end
-			source = source:gsub(regexEscape(ss), table.concat(r, ", "))
+			local tt = table.concat(r, ", ")
+			tl[tt] = #r
+			source = source:gsub(regexEscape(ss), tt)
 		end
+		source = source:gsub("(string%s+(%w+)%s?:(%s+)([|xa-f0-9, ]+)[^;])", function(found)
+			found = "object" .. found:sub(7)
+			return found .. " ? length=|" .. tostring(tl[found:gsub("object%s+%w+%s?:(%s+)", "")] * 8)
+		end)
 		return source
 	end
 }

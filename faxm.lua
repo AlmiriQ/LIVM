@@ -1,7 +1,10 @@
 local date = require"date"
 local opcode = require"faxmopcode"
 local FX = {
+	--require"faxm/fraCinize",
 	require"faxm/string",
+	require"faxm/ximplifier",
+	require"faxm/fraxevice",
 	require"faxm/freeform"
 }
 
@@ -65,18 +68,17 @@ function parseCode(source, code, data)
 	local objects = {}
 	for line in source:gmatch("([^;]+)") do
 		for k, v in pairs(FX) do if v.any_line then line = v.any_line(line) end end
-		if line == "[mainfile]" then
-		elseif line:sub(1, 1) == '[' then
+		if line:sub(1, 1) == '[' then
 			for k, v in pairs(date.decode(raw(line:sub(2, #line - 1):gsub("+", ":")))) do
 				if type(k) == "number" then
 					if v:sub(1, 1) == 'x' then xtype = v:sub(2, #v)
 					elseif v == "CODE" then section = code; 
 					elseif v == "DATA" then section = data; 
-					elseif k == "nominsize" then
+					elseif k == "noalign" then
 						if section == code then cminsize = -1 
 						else dminsize = -1 end
 					end
-				elseif k == "minsize" then
+				elseif k == "align" then
 					if section == code then cminsize = v else dminsize = v end
 				end
 			end
@@ -179,10 +181,8 @@ end
 
 local file = io.open(source)
 if file then
-	if file:read():gsub("%s", "") == "[mainfile]" then
-		file:seek("set", 0)
-		parseCode(file:read"*a", code, data)
-	end
+	file:seek("set", 0)
+	parseCode(file:read"*a", code, data)
 	file:close()
 end
 local loader_segment = {
