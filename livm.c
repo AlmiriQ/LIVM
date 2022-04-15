@@ -30,7 +30,7 @@ struct VMinst {
 char* dev_rom[] = {"sda"};
 
 #ifndef DEV_ROM_COUNT
-# define DEV_ROM_COUNT 0
+# define DEV_ROM_COUNT 1
 #endif
 
 #ifdef LIVMDEBUG

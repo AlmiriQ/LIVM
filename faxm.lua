@@ -2,10 +2,10 @@ local date = require"date"
 local opcode = require"faxmopcode"
 local FX = {
 	--require"faxm/fraCinize",
-	require"faxm/string",
-	require"faxm/ximplifier",
-	require"faxm/fraxevice",
-	require"faxm/freeform"
+	require"fraxinizator/string",
+	require"fraxinizator/ximplifier",
+	require"fraxinizator/fraxevice",
+	require"fraxinizator/freeform"
 }
 
 
@@ -63,6 +63,7 @@ end
 
 function parseCode(source, code, data)
 	for k, v in pairs(FX) do if v.source then source = v.source(source) end end
+	print(source)
 	local dminsize, cminsize, xtype = -1, -1, "8u"
 	local section, segment
 	local objects = {}
@@ -99,7 +100,6 @@ function parseCode(source, code, data)
 					vdata = vdata:trim():gsub(",", " "):gsub("%s+", " ")
 					for _, v in ipairs(vdata:split" ") do
 						if v:sub(1, 1) == "|" then
-							for k, v_ in pairs(FX) do if v_.eval then v = v_.eval(v) end end
 							v = v:sub(2)
 							if v:sub(1, 1) == "x" then v = "0" .. v end
 							v = load("return " .. v)()

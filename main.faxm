@@ -5,4 +5,5 @@ string hellohell:  |"hell-oh!";
 section start:
 	console.print(^helloworld, #helloworld.length)
 	console.print(^hellohell, #hellohell.length)
+	rom.write ^hellohell, #hellohell.length
 	poff
